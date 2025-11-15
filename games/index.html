@@ -488,6 +488,10 @@
             font-size: 0.9rem;
         }
 
+        .hidden {
+            display: none;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -546,6 +550,71 @@
                 display: none;
             }
         }
+
+        
+        :root{
+            --gh-primary: var(--primary);
+            --gh-secondary: var(--secondary);
+            --gh-text: var(--light);
+            --gh-muted: rgba(255,255,255,0.75);
+        }
+
+        #user-auth{ position:relative; overflow:hidden; background: linear-gradient(180deg,#02030a 0%, #071021 60%); color:var(--gh-text); font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; min-height:72vh; display:flex; align-items:center; justify-content:center; }
+        .gh-bg-canvas{ position:absolute; inset:0; z-index:0; pointer-events:none; }
+
+        .gh-auth-wrap{ position:relative; z-index:5; width:100%; max-width:1100px; margin:0 16px; display:grid; grid-template-columns:420px 1fr; gap:22px; align-items:center; }
+        .gh-card, .gh-hero{ border-radius:14px; padding:20px; }
+
+        .gh-hero{ background: linear-gradient(135deg, rgba(108,92,231,0.06), rgba(253,121,168,0.03)); box-shadow: 0 10px 30px rgba(2,6,20,0.6); border:1px solid rgba(255,255,255,0.02); min-height:360px; display:flex; flex-direction:column; gap:12px; justify-content:space-between; }
+    .gh-logo-row{ display:flex; gap:12px; align-items:center; }
+    .gh-mark{ width:64px; height:64px; border-radius:12px; display:grid; place-items:center; font-weight:900; background:linear-gradient(90deg,var(--gh-primary),var(--gh-secondary)); color:#041025; box-shadow:0 10px 40px rgba(108,92,231,0.12); font-size:1.15rem; }
+    .gh-typing{ font-weight:800; font-size:1.2rem; letter-spacing:0.6px; }
+    .gh-sub{ color:var(--gh-muted); font-size:0.95rem; line-height:1.4; }
+
+
+    /* right - card */
+    .gh-card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 14px 44px rgba(1,6,20,0.7); border:1px solid rgba(255,255,255,0.03); min-height:360px; display:flex; flex-direction:column; }
+    .gh-top{ display:flex; justify-content:space-between; align-items:center; }
+    .gh-tabs{ display:flex; gap:8px; }
+    .gh-tab{ padding:8px 14px; border-radius:10px; cursor:pointer; background:transparent; border:1px solid transparent; font-weight:800; color:var(--gh-text); }
+    .gh-tab.gh-active{ background:linear-gradient(90deg,var(--gh-primary),var(--gh-secondary)); color:#041025; box-shadow:0 8px 26px rgba(108,92,231,0.06); }
+
+    .gh-form{ padding-top:12px; display:flex; flex-direction:column; gap:10px; }
+    label{ font-size:0.85rem; color:var(--gh-muted); margin-bottom:4px; display:block; }
+    input[type="text"], input[type="password"]{ padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background: rgba(0,0,0,0.16); color:var(--gh-text); outline:none; transition: box-shadow .12s, border-color .12s; font-size:0.95rem; }
+    input:focus{ box-shadow:0 8px 20px rgba(108,92,231,0.06); border-color: rgba(108,92,231,0.24); }
+
+    .gh-row{ display:flex; gap:10px; align-items:center; }
+    .gh-btn{ padding:10px 14px; border-radius:10px; cursor:pointer; border:none; font-weight:800; background:linear-gradient(90deg,var(--gh-primary),var(--gh-secondary)); color:#041025; }
+    .gh-btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--gh-muted); font-weight:700; }
+
+    .gh-small{ font-size:0.9rem; color:var(--gh-muted); }
+
+    .gh-msg{ min-height:22px; margin-top:6px; color:#ffd7d7; font-weight:700; transition: transform .14s ease; }
+
+    /* password meter */
+    .gh-meter{ height:8px; background:rgba(255,255,255,0.03); border-radius:8px; overflow:hidden; margin-top:6px; }
+    .gh-meter-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--gh-primary),var(--gh-secondary)); transition: width .2s ease; }
+
+    /* shake animation for error */
+    @keyframes gh-shake { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-4px); } 40%, 60% { transform: translateX(4px); } }
+    .gh-shake { animation: gh-shake .5s ease; }
+
+    /* success pulse */
+    @keyframes gh-pulse { 0%{ transform:scale(1); } 50%{ transform:scale(1.02);} 100%{ transform:scale(1);} }
+    .gh-success { animation: gh-pulse .6s ease; }
+
+    /* small screens */
+    @media (max-width:880px){ .gh-auth-wrap{ grid-template-columns:1fr; } .gh-hero{ order:2; } .gh-card{ order:1; } }
+
+    /* subtle focus visible */
+    input:focus-visible{ outline:2px solid rgba(108,92,231,0.12); outline-offset:2px; border-radius:10px; }
+
+    /* tooltip small */
+    .gh-tooltip{ position:relative; display:inline-block; }
+    .gh-tooltip[aria-label]:hover::after{ content: attr(aria-label); position:absolute; bottom: calc(100% + 8px); right:0; background:rgba(0,0,0,0.7); color:#fff; padding:6px 8px; border-radius:6px; font-size:0.8rem; white-space:nowrap; }
+
+
     </style>
 </head>
 <body>
@@ -561,6 +630,7 @@
                     <li><a href="#" class="nav-link" data-page="games"><i class="fas fa-gamepad"></i> <span>Games</span></a></li>
                     <li><a href="#" class="nav-link" data-page="leaderboard"><i class="fas fa-trophy"></i> <span>Leaderboard</span></a></li>
                     <li><a href="#" class="nav-link" data-page="contact"><i class="fas fa-info-circle"></i> <span>Contact</span></a></li>
+                    <li><a href="#" class="nav-link" data-page="user-auth"><i class="fas fa-sign-in-alt"></i> <span>Login</span></a></li>
                 </ul>
             </nav>
         </header>
@@ -593,7 +663,7 @@
             <div class="games-section">
                 <h2 class="section-title">Featured Games</h2>
                 <div class="games-grid">
-                    <a href="games/spaceadv/index.html" class="game-card" style="text-decoration: none; color: inherit;">
+                    <a href="spaceadv/index.html" class="game-card" style="text-decoration: none; color: inherit;">
                         <div class="game-image">
                            <img src="https://thumbs.dreamstime.com/b/pixel-art-retro-space-shooter-classic-spacecraft-design-pixel-art-retro-space-shooter-classic-spacecraft-design-star-field-356409576.jpg" alt="Space Adventure">
                         </div>
@@ -604,7 +674,7 @@
                     </a>
 
 
-                    <a href="games/mysticpuzzle/index.html" class="game-card" style="text-decoration: none; color: inherit;">
+                    <a href="mysticpuzzle/index.html" class="game-card" style="text-decoration: none; color: inherit;">
                       <div class="game-image">
                          <img src="https://png.pngtree.com/thumb_back/fh260/background/20230615/pngtree-incomplete-jigsaw-puzzle-in-3d-rendering-image_3601677.jpg" alt="Mystic Puzzle">
                       </div>
@@ -615,7 +685,7 @@
                     </a>
 
 
-                    <a href="games/racingfury/index.html" class="game-card" style="text-decoration: none; color: inherit;">
+                    <a href="racingfury/index.html" class="game-card" style="text-decoration: none; color: inherit;">
                        <div class="game-image">
                          <img src="https://c8.alamy.com/comp/2J49W0D/grunge-waing-car-race-flag-with-scratches-vector-illustration-checkered-pattern-of-start-and-finish-of-auto-rally-and-motocross-banner-for-karting-s-2J49W0D.jpg" alt="Racing Fury">
                        </div>
@@ -625,9 +695,7 @@
                        </div>
                     </a>
 
-
-                    <!-- New Games -->
-                     <a href="games/snake/index.html" class="game-card" style="text-decoration: none; color: inherit;">
+                     <a href="snake/index.html" class="game-card" style="text-decoration: none; color: inherit;">
                        <div class="game-image">
                          <img src="https://thumbs.dreamstime.com/b/closeup-venomous-purplespotted-green-pit-viper-trimeresurus-purpureomaculatus-its-natural-habitat-stunning-356039618.jpg" alt="Snake Game">
                        </div>
@@ -637,7 +705,7 @@
                        </div>
                      </a>
 
-                    <a href="games/tictaktoe/index.html" class="game-card" style="text-decoration: none; color: inherit;">
+                    <a href="tictaktoe/index.html" class="game-card" style="text-decoration: none; color: inherit;">
                       <div class="game-image">
                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQET9Qor8gbgBrzqQYdUeD99AxMcu5WwRilw&s" alt="Tic Tac Toe">
                       </div>
@@ -647,7 +715,7 @@
                        </div>
                     </a>
 
-                    <a href="games/memory/index.html" class="game-card" style="text-decoration: none; color: inherit;">
+                    <a href="memory/index.html" class="game-card" style="text-decoration: none; color: inherit;">
                       <div class="game-image">
                          <img src="https://media.petercollingridge.co.uk/images/memory_game.width-300.jpg" alt="Memory Challenge">
                       </div>
@@ -729,75 +797,177 @@
             </div>
         </section>
 
+        <!--login page-->
+
+        <section id="user-auth" class="page" aria-labelledby="auth-title" style="padding:2.2rem 1rem;">
+            
+
+            <canvas id="gh-canvas" class="gh-bg-canvas"></canvas>
+
+  
+            <div class="gh-auth-wrap" role="application" aria-live="polite">
+                <div class="gh-hero" aria-hidden="false">
+      <div>
+        <div class="gh-logo-row">
+          <div class="gh-mark" id="gh-mark">GH</div>
+          <div>
+            <div class="gh-typing" id="gh-typing">GameHub — Play faster</div>
+            <div class="gh-sub">Sign in, manage saves, and publish builds. Interactive preview enabled.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <span class="gh-pill gh-small" style="background:rgba(255,255,255,0.02); padding:6px 10px; border-radius:999px; color:var(--gh-muted);">Local saves</span>
+          <span class="gh-pill gh-small" style="background:rgba(255,255,255,0.02); padding:6px 10px; border-radius:999px; color:var(--gh-muted);">Leaderboard</span>
+          <span class="gh-pill gh-small" style="background:rgba(255,255,255,0.02); padding:6px 10px; border-radius:999px; color:var(--gh-muted);">Fast preview</span>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center;">
+        <div class="gh-small" style="color:var(--gh-muted)">Tip</div>
+        <div style="color:var(--gh-primary); font-weight:800">Press Ctrl+K to focus username</div>
+      </div>
+    </div>
+
+    <div class="gh-card" role="region" aria-label="Authentication card">
+      <div class="gh-top">
+        <div id="auth-title" style="font-weight:900; font-size:1rem">Account</div>
+        <div class="gh-tabs" role="tablist" aria-label="Auth tabs">
+          <button id="gh-tab-login" class="gh-tab gh-active" role="tab" aria-selected="true">Login</button>
+          <button id="gh-tab-register" class="gh-tab" role="tab" aria-selected="false">Register</button>
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="gh-login" class="gh-form" aria-hidden="false">
+        <div>
+          <label for="gh-login-username">Username</label>
+          <input id="gh-login-username" type="text" autocomplete="username" placeholder="player_one" required>
+        </div>
+
+        <div>
+          <label for="gh-login-password">Password
+            <span class="gh-tooltip" aria-label="Toggle visibility" style="margin-left:8px;">
+              <button id="gh-toggle-pass" class="gh-btn ghost" style="padding:6px 8px; font-weight:700; font-size:0.85rem;">Show</button>
+            </span>
+          </label>
+          <input id="gh-login-password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+          <div class="gh-meter" aria-hidden="true"><div id="gh-meter-fill" class="gh-meter-fill"></div></div>
+        </div>
+
+        <div class="gh-row gh-actions" style="margin-top:6px;">
+          <button id="gh-login-btn" class="gh-btn">Sign in</button>
+          <button id="gh-demo-btn" class="gh-btn ghost" type="button">Demo</button>
+          <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+            <label class="gh-small" style="display:flex; gap:6px; align-items:center;"><input id="gh-remember" type="checkbox"> Remember</label>
+            <a href="#" id="gh-forgot" class="gh-small">Forgot?</a>
+          </div>
+        </div>
+
+        <div class="gh-socials" aria-hidden="true" style="margin-top:8px; display:flex; gap:8px;">
+          <div class="gh-social gh-tooltip" aria-label="Simulated Google" data-provider="google">G</div>
+          <div class="gh-social gh-tooltip" aria-label="Simulated Discord" data-provider="discord">D</div>
+          <div class="gh-social gh-tooltip" aria-label="Simulated GitHub" data-provider="github">GH</div>
+        </div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="gh-register" class="gh-form" aria-hidden="true" style="display:none;">
+        <div>
+          <label for="gh-register-username">Choose username</label>
+          <input id="gh-register-username" type="text" autocomplete="username" placeholder="new_player" required>
+        </div>
+        <div>
+          <label for="gh-register-password">Choose password</label>
+          <input id="gh-register-password" type="password" autocomplete="new-password" placeholder="strong password" required>
+          <div class="gh-meter" aria-hidden="true"><div id="gh-reg-meter" class="gh-meter-fill"></div></div>
+        </div>
+
+        <div class="gh-row gh-actions">
+          <button id="gh-register-btn" class="gh-btn">Create account</button>
+          <button id="gh-back-btn" class="gh-btn ghost">Back</button>
+        </div>
+
+        <div class="gh-small" style="margin-top:8px">Accounts stored locally in demo. Hook a backend for production.</div>
+      </div>
+
+      <div id="gh-auth-msg" class="gh-msg" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- mini confetti canvas (overlay) -->
+  <canvas id="gh-confetti" style="position:absolute; inset:0; pointer-events:none; z-index:6;"></canvas>
+
+
+        </section>
+
+
+        
+
         <footer>
             <div class="social-icons">
                 <a href="https://www.linkedin.com/in/adit-mishra-463601259/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://github.com/4mo4cyb3r5l4y3r2/" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://4mo4cyb3r5l4y3r2.github.io/portfolio/" target="_blank"><i class="fas fa-globe"></i></a>
+                <a href="https://github.com/aditmishra004/" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://aditmishra004.github.io/portfolio/" target="_blank"><i class="fas fa-globe"></i></a>
                 <a href="https://www.instagram.com/_a_m_004_?igsh=bDc4a3NlYmJ5MGQ3" target="_blank"><i class="fab fa-instagram"></i></a>
                 <a href="mailto:mishraadit2104@gmail.com"><i class="fas fa-envelope"></i></a>
             </div>
 
             <p class="copyright">GameHub. Made with <i class="fas fa-heart" style="color: var(--accent);"></i> for gamers</p>
         </footer>
+
+
+        
     </div>
+
+
 
     <script>
         //leaderboard functionality
-        function renderLeaderboard() {
-          const leaderboardBody = document.getElementById('leaderboard-body');
-          leaderboardBody.innerHTML = '';
-          const leaderboard = JSON.parse(localStorage.getItem('gameLeaderboard')) || [];
-          leaderboard.sort((a, b) => b.score - a.score);
-          
-          
-          
-          if (leaderboard.length === 0) {
-            leaderboardBody.innerHTML = `
-              <tr>
-                <td colspan="4" style="text-align: center; padding: 20px;">
-                    No records yet. Play a game to appear here!
-                </td>
-              </tr>
-            `;
-            return;
-          }
-          
-          
-          //creating rows for each Player
-          leaderboard.forEach((player, index) => {
-            const row = document.createElement('tr');
-            const rankClass = index < 3 ? 'top-rank' : '';
-            
-            row.innerHTML = `
-               <td><span class="rank ${rankClass}">${index + 1}</span></td>
-               <td>${player.name}</td>
-               <td>${player.game}</td>
-               <td>${player.score}</td>
-            `;
-            leaderboardBody.appendChild(row);
-          });
-        }
-        
-        //Function to save score to leaderboard
-        function saveScoreToLeaderboard(playerName, gameName, score) {
-          const leaderboard = JSON.parse(localStorage.getItem('gameLeaderboard')) || [];
-          
-          
-          //new player entry addition
-          leaderboard.push({
-            name:playerName,
-            game:gameName,
-            score: score,
-            timestamo: new Date().toISOString()
-          });
-          
-          //save back to localStorage
-          localStorage.setItem('gameLeaderboard', JSON.stringify(leaderboard));
-          renderLeaderboard();
-        }
-        
+        async function renderLeaderboard() {
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            leaderboardBody.innerHTML = ''; 
 
+            try {
+                const response = await fetch('http://localhost:3000/api/leaderboard');
+                const scores = await response.json();
+                if (scores.length === 0) {
+                    leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No records yet. Be the first!</td></tr>';
+                    return;
+                }
+    
+
+
+                scores.forEach((entry, index) => {
+
+                    const row = document.createElement('tr');
+
+                    const rankClass = index < 3 ? 'top-rank' : '';
+      
+
+                    row.innerHTML = `
+
+                    <td><span class="rank ${rankClass}">${index + 1}</span></td>
+
+                    <td>${entry.player ? entry.player.username : 'Anonymous'}</td>
+                    <td>${entry.gameName}</td>
+
+                    <td>${entry.score}</td>
+      
+                    `;
+
+                    leaderboardBody.appendChild(row);
+                });
+
+
+            } catch (error) {
+
+                console.error('Failed to fetch leaderboard:', error);
+
+                leaderboardBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">Error loading leaderboard.</td></tr>';
+
+            }
+        }
+        
         // Page Navigation
         document.addEventListener('DOMContentLoaded', function() {
             const navLinks = document.querySelectorAll('.nav-link');
@@ -882,7 +1052,234 @@
         });
         
         
-        renderLeaderboard();
+       
+
+
+        
     </script>
+
+    <script src ="auth.js"></script>
+
+    <script>
+
+        (function(){
+      
+      const $ = id => document.getElementById(id);
+      const setMsg = (m, ok) => {
+        const el = $('gh-auth-msg');
+        el.style.color = ok ? '#bff7d7' : '#ffd7d7';
+        el.textContent = m || '';
+        if(!ok && m) { el.classList.remove('gh-success'); el.classList.add('gh-shake'); setTimeout(()=>el.classList.remove('gh-shake'), 600); }
+        if(ok && m){ el.classList.add('gh-success'); setTimeout(()=>el.classList.remove('gh-success'), 800); }
+      };
+      function hash(s){ let h=0; for(let i=0;i<s.length;i++){ h=(h<<5)-h + s.charCodeAt(i); h|=0;} return String(Math.abs(h)); }
+
+      // ---------- tabs ----------
+      const tabLogin = $('gh-tab-login'), tabReg = $('gh-tab-register');
+      const viewLogin = () => { $('gh-login').style.display=''; $('gh-login').setAttribute('aria-hidden','false'); $('gh-register').style.display='none'; $('gh-register').setAttribute('aria-hidden','true'); tabLogin.classList.add('gh-active'); tabReg.classList.remove('gh-active'); setMsg(''); };
+      const viewReg = () => { $('gh-register').style.display=''; $('gh-register').setAttribute('aria-hidden','false'); $('gh-login').style.display='none'; $('gh-login').setAttribute('aria-hidden','true'); tabReg.classList.add('gh-active'); tabLogin.classList.remove('gh-active'); setMsg(''); };
+      tabLogin.addEventListener('click', viewLogin); tabReg.addEventListener('click', viewReg); $('gh-back-btn').addEventListener('click', viewLogin);
+
+      // ---------- external auth detection ----------
+      const externalLogin = (typeof window.loginUser === 'function');
+      const externalRegister = (typeof window.registerUser === 'function');
+
+      // ---------- demo auth handlers ----------
+      function demoRegister(u,p){
+        const user = (u||'').trim().toLowerCase();
+        if(!user || !p){ setMsg('Username & password required.'); return; }
+        const key = 'gh_user_'+user;
+        if(localStorage.getItem(key)){ setMsg('Account exists.'); return; }
+        localStorage.setItem(key, hash(p));
+        setMsg('Account created. Log in now.', true);
+        $('gh-login-username').value = u; $('gh-login-password').value = '';
+        viewLogin();
+      }
+      function demoLogin(u,p){
+        const user = (u||'').trim().toLowerCase();
+        if(!user || !p){ setMsg('Enter credentials.'); return; }
+        const key = 'gh_user_'+user;
+        const stored = localStorage.getItem(key);
+        if(!stored){ setMsg('No such account.'); return; }
+        if(stored !== hash(p)){ setMsg('Incorrect password.'); return; }
+        setMsg('Signed in — welcome ' + u + '!', true);
+        // remember
+        if($('gh-remember').checked) localStorage.setItem('gh_last', user);
+        sessionStorage.setItem('gh_session', user);
+        // success confetti
+        spawnConfetti();
+        setTimeout(()=> {
+          // try to navigate to games link if exists
+          const nav = document.querySelector('.nav-link[data-page="games"]');
+          if(nav) nav.click(); else location.reload();
+        }, 700);
+      }
+
+      // ---------- wire up buttons ----------
+      $('gh-register-btn').addEventListener('click', ()=>{
+        const u = $('gh-register-username').value, p = $('gh-register-password').value;
+        if(externalRegister){ try{ window.registerUser(u,p); } catch(e){ setMsg('External register error: '+ e.message); } return; }
+        demoRegister(u,p);
+      });
+
+      $('gh-login-btn').addEventListener('click', ()=>{
+        const u = $('gh-login-username').value, p = $('gh-login-password').value;
+        if(externalLogin){ try{ window.loginUser(u,p); } catch(e){ setMsg('External login error: '+ e.message); } return; }
+        demoLogin(u,p);
+      });
+
+      $('gh-demo-btn').addEventListener('click', ()=>{
+        const demoU='demo_player', demoP='demo123';
+        localStorage.setItem('gh_user_'+demoU, hash(demoP));
+        $('gh-login-username').value = demoU; $('gh-login-password').value = demoP;
+        $('gh-login-btn').click();
+      });
+
+      document.querySelectorAll('.gh-social').forEach(s=>{
+        s.addEventListener('click', ()=>{
+          const prov = s.dataset.provider || 'oauth';
+          setMsg('Simulated social login: ' + prov, true);
+          sessionStorage.setItem('gh_session', prov + '_demo');
+          spawnConfetti();
+          setTimeout(()=> location.reload(), 600);
+        });
+      });
+      $('gh-forgot').addEventListener('click', (e)=>{ e.preventDefault(); setMsg('No recovery in demo. Create new account.'); });
+
+      // ---------- keyboard shortcuts ----------
+      document.addEventListener('keydown', (e)=>{
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){ e.preventDefault(); $('gh-login-username').focus(); $('gh-login-username').select(); }
+      });
+
+      // ---------- toggle password ----------
+      const toggleBtn = $('gh-toggle-pass');
+      toggleBtn.addEventListener('click', ()=>{
+        const p = $('gh-login-password');
+        const showing = p.type === 'text';
+        p.type = showing ? 'password' : 'text';
+        toggleBtn.textContent = showing ? 'Show' : 'Hide';
+        p.focus();
+      });
+
+      // ---------- password strength (simple) ----------
+      function scorePassword(s){
+        if(!s) return 0;
+        let score=0;
+        if(s.length >= 8) score+=2;
+        if(s.length >= 12) score+=1;
+        if(/[A-Z]/.test(s)) score+=1;
+        if(/[0-9]/.test(s)) score+=1;
+        if(/[^A-Za-z0-9]/.test(s)) score+=1;
+        return Math.min(score,5);
+      }
+      function updateMeter(id, val){
+        const fill = $(id);
+        if(!fill) return;
+        const pct = Math.round((val/5)*100);
+        fill.style.width = pct+'%';
+      }
+      $('gh-login-password').addEventListener('input', (e)=> updateMeter('gh-meter-fill', scorePassword(e.target.value)));
+      $('gh-register-password').addEventListener('input', (e)=> updateMeter('gh-reg-meter', scorePassword(e.target.value)));
+
+      // ---------- typing effect for logo text ----------
+      (function typing(){
+        const el = $('gh-typing');
+        const options = ['GameHub — Play faster','GameHub — Ship builds','GameHub — High scores','GameHub — Local saves'];
+        let idx = 0, i = 0, forward = true, wait = 0;
+        setInterval(()=>{
+          if(wait>0){ wait--; return; }
+          const text = options[idx];
+          el.textContent = text.substring(0,i) + (Date.now()%700 < 350 ? '|' : ' ');
+          if(forward) i++;
+          else i--;
+          if(i>text.length){ forward=false; wait=18; }
+          if(i===0 && !forward){ forward=true; idx=(idx+1)%options.length; }
+        }, 80);
+      })();
+
+      // ---------- interactive background - particles ----------
+      (function particles(){
+        const canvas = $('gh-canvas');
+        const ctx = canvas.getContext('2d');
+        let w=0,h=0, particles=[];
+        function resize(){ w=canvas.width = window.innerWidth; h=canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+
+        function rand(min,max){ return Math.random()*(max-min)+min; }
+        function create(){
+          for(let i=0;i<40;i++){
+            particles.push({ x:rand(0,w), y:rand(0,h), r:rand(0.6,2.6), vx:rand(-0.15,0.15), vy:rand(-0.05,0.15), hue:rand(180,260) });
+          }
+        }
+        create();
+        function step(){
+          ctx.clearRect(0,0,w,h);
+          for(let p of particles){
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < -10) p.x = w+10; if(p.x > w+10) p.x = -10;
+            if(p.y > h+20) p.y = -20;
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(108,92,231,0.12)';
+            ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+            ctx.fill();
+          }
+          requestAnimationFrame(step);
+        }
+        step();
+      })();
+
+      // ---------- confetti (tiny) ----------
+      function spawnConfetti(){
+        const c = $('gh-confetti');
+        const ctx = c.getContext('2d');
+        let w = c.width = window.innerWidth, h = c.height = window.innerHeight;
+        const pieces = [];
+        const colors = ['#6cf0ff','#8a5cff','#ffd166','#ff6b6b','#6ef58a'];
+        for(let i=0;i<120;i++){
+          pieces.push({
+            x: Math.random()*w, y: Math.random()*-h, vx: (Math.random()-0.5)*6, vy: Math.random()*4+2,
+            r: Math.random()*6+4, c: colors[Math.floor(Math.random()*colors.length)], rot: Math.random()*360
+          });
+        }
+        let t=0;
+        function loop(){
+          ctx.clearRect(0,0,w,h);
+          for(const p of pieces){
+            p.x += p.vx; p.y += p.vy; p.vy += 0.06; p.rot += p.vx*2;
+            ctx.save();
+            ctx.translate(p.x,p.y);
+            ctx.rotate(p.rot*Math.PI/180);
+            ctx.fillStyle = p.c;
+            ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);
+            ctx.restore();
+          }
+          t++;
+          if(t < 220) requestAnimationFrame(loop); else ctx.clearRect(0,0,w,h);
+        }
+        loop();
+        setTimeout(()=>{ try{ ctx.clearRect(0,0,w,h);} catch(e){} }, 2400);
+      }
+
+      // ---------- initial state / remember last ----------
+      const last = localStorage.getItem('gh_last');
+      if(last){ $('gh-login-username').value = last; $('gh-remember').checked = true; }
+
+      // ---------- focus convenience ----------
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ if(document.activeElement === $('gh-register-password')) $('gh-register-btn').click(); } });
+
+      // ---------- defensive export (optional) ----------
+      // If you want other scripts to trigger confetti or login, expose small API
+      window.ghAuth = { spawnConfetti };
+
+      // done
+    })();
+
+
+
+    </script>
+
+    
+
+
 </body>
 </html>

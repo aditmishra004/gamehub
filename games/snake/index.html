@@ -379,6 +379,8 @@
       // Start game loop
       if (gameLoop) clearInterval(gameLoop);
       gameLoop = setInterval(update, gameSpeed);
+
+      document.documentElement.requestFullscreen();
     }
     
     // Generate food at random position
@@ -504,14 +506,17 @@
       gameRunning = false;
       clearInterval(gameLoop);
       
-      // Update high score
+      
       if (score > highScore) {
         highScore = score;
         localStorage.setItem('snakeHighScore', highScore);
         highScoreElement.textContent = highScore;
+      
       }
       
-      // Show game over message
+      
+      submitScore("Snake", score); 
+      
       finalScore.textContent = score;
       finalHighScore.textContent = highScore;
       winMessage.classList.add('show');
@@ -552,9 +557,57 @@
     pauseButton.addEventListener('click', togglePause);
     playAgainButton.addEventListener('click', initGame);
     backButton.addEventListener('click', () => {
-      window.location.href = '../../index.html';
+      window.location.href = '../index.html';
     });
     
+    
+    
+    
+    
+    async function submitScore(gameName, finalScore) {
+      const token = localStorage.getItem('token');
+      
+      
+      if (!token) {
+        console.log('User is not logged in. Score not submitted.');
+        alert('You must be logged in to save your score!');
+        return;
+      }
+      
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token 
+          },
+          
+          body: JSON.stringify({
+            gameName: gameName,
+            score: finalScore 
+          })
+        });
+        
+        if (response.ok) {
+          alert('Your score has been saved to the leaderboard!');
+        } else {
+          
+          alert('Failed to save score. Please try again.');
+        }
+      
+      
+      } catch (error) {
+        console.error('Error submitting score:', error);
+      
+      }
+    
+    }
+
+
+
+
+
     // Initialize the game
     initGame();
   </script>

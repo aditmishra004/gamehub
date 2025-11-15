@@ -21,7 +21,7 @@
       flex-direction: column;
       align-items: center;
       padding: 20px;
-      overflow: hidden;
+      overflow: auto;
     }
     
     .game-container {
@@ -303,7 +303,7 @@
     </div>
     
     <div class="game-area">
-      <canvas id="gameCanvas" width="600" height="500"></canvas>
+      <canvas id="gameCanvas" width="600" height="500" tabindex="0"></canvas>
       
       <div class="controls">
         <button class="control-button" id="restartButton" tabindex="-1">
@@ -317,8 +317,8 @@
       <div class="instructions">
         <h3><i class="fas fa-info-circle"></i> How to Play</h3>
         <ul>
-          <li>Use <strong>Arrow Keys</strong> to move your spaceship</li>
-          <li>Press <strong>Spacebar</strong> to shoot</li>
+          <li>Use <strong>Arrow Keys</strong> or <strong>WASD</strong> to move your spaceship</li>
+          <li>Press <strong>Spacebar</strong> or <strong>Enter</strong>to shoot</li>
           <li>Destroy asteroids and enemy ships to earn points</li>
           <li>Avoid collisions to preserve your ship</li>
           <li>Collect power-ups for special abilities</li>
@@ -409,6 +409,7 @@
       livesElement.textContent = lives;
       levelElement.textContent = level;
       winMessage.classList.remove('show');
+      canvas.focus();
       
       // Start game loop
       if (animationId) cancelAnimationFrame(animationId);
@@ -417,6 +418,8 @@
       // Start enemy spawner
       spawnEnemies();
       spawnAsteroids();
+
+      document.documentElement.requestFullscreen();
     }
     
     // Draw player ship
@@ -833,6 +836,7 @@
         finalLevel.textContent = level;
         winMessage.classList.add('show');
         gameRunning = false;
+        submitScore("Space Adventure", score);
         return;
       }
       
@@ -840,26 +844,87 @@
         animationId = requestAnimationFrame(gameLoop);
       }
     }
+
+
+
+    async function submitScore(gameName, finalScore) {
+      const token = localStorage.getItem('token');
+      
+      
+      if (!token) {
+        console.log('User is not logged in. Score not submitted.');
+        alert('You must be logged in to save your score!');
+        return;
+      }
+      
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token 
+          },
+          
+          body: JSON.stringify({
+            gameName: gameName,
+            score: finalScore 
+          })
+        });
+        
+        if (response.ok) {
+          alert('Your score has been saved to the leaderboard!');
+        } else {
+          
+          alert('Failed to save score. Please try again.');
+        }
+      
+      
+      } catch (error) {
+        console.error('Error submitting score:', error);
+      
+      }
+    
+    }
     
     // Event listeners
-    document.addEventListener('keydown', e => {
+    canvas.addEventListener('keydown', e => {
+      console.log("Key pressed",e.key);
+
+      if (e.key === 'p' || e.key === 'P') {
+        togglePause();
+        return; 
+      }
+
       if (!gameRunning) return;
       
       switch (e.key) {
         case 'ArrowUp':
+        case 'w':
+        case 'W':
+          e.preventDefault();
           player.y = Math.max(player.y - player.speed, 0);
           break;
         case 'ArrowDown':
+        case 's':
+        case 'S':
+          e.preventDefault();
           player.y = Math.min(player.y + player.speed, canvas.height - player.height);
           break;
         case 'ArrowLeft':
+        case 'a':
+        case 'A':
+          e.preventDefault();
           player.x = Math.max(player.x - player.speed, 0);
           break;
         case 'ArrowRight':
+        case 'd':
+        case 'D':
+          e.preventDefault();
           player.x = Math.min(player.x + player.speed, canvas.width - player.width);
           break;
         case ' ':
-          // Prevent default to avoid button activation
+        case 'Enter':
           e.preventDefault();
           if (Date.now() - player.lastShot > 200) {
             player.lasers.push({
@@ -873,10 +938,6 @@
             player.lastShot = Date.now();
           }
           break;
-        case 'p':
-        case 'P':
-          togglePause();
-          break;
       }
     });
     
@@ -887,15 +948,28 @@
         '<i class="fas fa-play"></i> Resume';
       
       if (gameRunning) {
+        canvas.focus();
         gameLoop();
       }
-    }
-    
-    restartButton.addEventListener('click', initGame);
-    pauseButton.addEventListener('click', togglePause);
-    playAgainButton.addEventListener('click', initGame);
+    } 
+
+    restartButton.addEventListener('click', () => {
+      initGame();
+      canvas.focus(); // <-- Add this
+    });
+
+
+    pauseButton.addEventListener('click', () => {
+      togglePause();
+      canvas.focus(); // <-- Add this
+    });
+
+    playAgainButton.addEventListener('click', () => {
+      initGame();
+      canvas.focus(); // <-- Add this
+    });
     backButton.addEventListener('click', () => {
-      window.location.href = '../../index.html';
+      window.location.href = '../index.html';
     });
     
     // Initialize the game

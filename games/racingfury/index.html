@@ -21,7 +21,7 @@
       flex-direction: column;
       align-items: center;
       padding: 20px;
-      overflow: hidden;
+      overflow: auto;
     }
     
     .game-container {
@@ -300,7 +300,7 @@
     </div>
     
     <div class="game-area">
-      <canvas id="gameCanvas" width="600" height="500"></canvas>
+      <canvas id="gameCanvas" width="600" height="500" tabindex="0"></canvas>
       
       <div class="controls">
         <button class="control-button" id="restartButton">
@@ -401,6 +401,7 @@
       gameTime = 0;
       gameRunning = true;
       gameOver = false;
+
       
       // Initialize road markings
       road.markings = [];
@@ -416,6 +417,7 @@
       speedElement.textContent = Math.round(playerCar.speed);
       timeElement.textContent = gameTime.toFixed(1);
       winMessage.classList.remove('show');
+      canvas.focus();
       
       // Start game loop
       if (animationId) cancelAnimationFrame(animationId);
@@ -426,6 +428,9 @@
       spawnCars();
       spawnCoins();
       spawnObstacles();
+
+
+      document.documentElement.requestFullscreen();
     }
     
     // Draw road
@@ -699,6 +704,7 @@
         gameRunning = false;
         finalScore.textContent = score;
         finalSpeed.textContent = Math.round(playerCar.speed);
+        submitScore("Racing Fury", score);
         winMessage.classList.add('show');
       }
       
@@ -713,15 +719,19 @@
       
       switch (e.key) {
         case 'ArrowUp':
+          e.preventDefault();
           playerCar.speed = Math.min(playerCar.speed + playerCar.acceleration, playerCar.maxSpeed);
           break;
         case 'ArrowDown':
+          e.preventDefault();
           playerCar.speed = Math.max(playerCar.speed - playerCar.deceleration * 2, 0);
           break;
         case 'ArrowLeft':
+          e.preventDefault();
           playerCar.x = Math.max(playerCar.x - 7, road.x + 10);
           break;
         case 'ArrowRight':
+          e.preventDefault();
           playerCar.x = Math.min(playerCar.x + 7, road.x + road.width - playerCar.width - 10);
           break;
       }
@@ -734,15 +744,69 @@
         playerCar.nitro -= 10;
       }
     }
+
+
+    async function submitScore(gameName, finalScore) {
+      const token = localStorage.getItem('token');
+      
+      
+      if (!token) {
+        console.log('User is not logged in. Score not submitted.');
+        alert('You must be logged in to save your score!');
+        return;
+      }
+      
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token 
+          },
+          
+          body: JSON.stringify({
+            gameName: gameName,
+            score: finalScore 
+          })
+        });
+        
+        if (response.ok) {
+          alert('Your score has been saved to the leaderboard!');
+        } else {
+          
+          alert('Failed to save score. Please try again.');
+        }
+      
+      
+      } catch (error) {
+        console.error('Error submitting score:', error);
+      
+      }
+    
+    }
     
     // Event listeners
-    document.addEventListener('keydown', handleKeyDown);
-    boostButton.addEventListener('click', handleNitro);
-    restartButton.addEventListener('click', initGame);
-    playAgainButton.addEventListener('click', initGame);
-    backButton.addEventListener('click', () => {
-      window.location.href = '../../index.html';
+    canvas.addEventListener('keydown', handleKeyDown);
+    boostButton.addEventListener('click', () => {
+      handleNitro();
+      canvas.focus(); 
     });
+
+    restartButton.addEventListener('click', () => {
+      initGame();
+      canvas.focus(); 
+    });
+
+    playAgainButton.addEventListener('click', () => {
+      initGame();
+      canvas.focus(); 
+    });
+
+    backButton.addEventListener('click', () => {
+      window.location.href = '../index.html';
+    });
+
     
     // Initialize the game
     initGame();

@@ -322,6 +322,8 @@
       // Hide win message
       winMessage.classList.remove('show');
     }
+
+    document.documentElement.requestFullscreen();
     
     // Handle cell click
     function handleCellClick(e) {
@@ -436,10 +438,52 @@
     function checkDraw() {
       return board.every(cell => cell !== '');
     }
+
+
+    async function submitScore(gameName, finalScore) {
+      const token = localStorage.getItem('token');
+      
+      
+      if (!token) {
+        console.log('User is not logged in. Score not submitted.');
+        alert('You must be logged in to save your score!');
+        return;
+      }
+      
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token 
+          },
+          
+          body: JSON.stringify({
+            gameName: gameName,
+            score: finalScore 
+          })
+        });
+        
+        if (response.ok) {
+          alert('Your score has been saved to the leaderboard!');
+        } else {
+          
+          alert('Failed to save score. Please try again.');
+        }
+      
+      
+      } catch (error) {
+        console.error('Error submitting score:', error);
+      
+      }
+    
+    }
     
     // End game
     function endGame(isDraw) {
       gameActive = false;
+      let finalScore = 0;
       
       if (isDraw) {
         winTitle.textContent = "It's a Draw!";
@@ -448,15 +492,23 @@
         if (currentPlayer === 'X') {
           winTitle.textContent = "You Win!";
           winText.textContent = "Congratulations on your victory!";
+          finalScore = 100;
         } else {
           winTitle.textContent = "Computer Wins!";
           winText.textContent = "Better luck next time!";
         }
       }
+      submitScore("Tic Tac Toe", finalScore);
       
       winMessage.classList.add('show');
     }
     
+
+
+    
+
+
+
     // Event listeners
     cells.forEach(cell => {
       cell.addEventListener('click', handleCellClick);
@@ -465,7 +517,7 @@
     restartButton.addEventListener('click', initGame);
     playAgainButton.addEventListener('click', initGame);
     backButton.addEventListener('click', () => {
-      window.location.href = '../../index.html';
+      window.location.href = '../index.html';
     });
     
     // Initialize the game
