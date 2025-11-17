@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, '../games')));
 // Make sure you have replaced this with your actual connection string!
 
 
-const dbURI = 'mongodb+srv://mishraadit2104:terror01@cluster0.351yfx9.mongodb.net/gameprojectdb?retryWrites=true&w=majority&appName=Cluster0';
+const dbURI = 'NOT Gonna Tell You';
 
 mongoose.connect(dbURI)
   .then(() => console.log('Connected to MongoDB'))
